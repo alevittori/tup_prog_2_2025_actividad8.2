@@ -1,9 +1,11 @@
 ﻿using Ejercicio1.Models;
+using Ejercicio1.Models.Exportadores;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,6 +110,61 @@ namespace Ejercicio1
                 MessageBox.Show(ex.Message, "Ups!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 MessageBox.Show("Error en Listbox Select Cahnge");
             }
+        }
+
+        private void btnImportar_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "(csv)|*.csv|(json)|*.json|(txt)|*.txt|(xml)|*.xml";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string path = openFileDialog1.FileName;
+                int tipo = openFileDialog1.FilterIndex;
+
+                IExportador exportador = (new ExportadorFactory()).GetInstance(tipo);
+
+                FileStream fs = null;
+                StreamReader sr = null;
+                try
+                {
+                    fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    sr = new StreamReader(fs);
+
+                    //descarto la cabecera
+                    sr.ReadLine();
+
+                    while (!sr.EndOfStream)
+                    {
+                        string linea = sr.ReadLine();
+                        IExportable nuevo = new Multa();
+
+                        if (nuevo.Importar(linea, exportador) == true)
+                        {
+                            int idx = multas.BinarySearch(nuevo);
+                            if (idx >= 0)
+                            {
+                                Multa multa = multas[idx] as Multa;
+                                multa.Importe += ((Multa)nuevo).Importe;
+                                if (multa.Vencimiento < ((Multa)nuevo).Vencimiento) ;
+                                multa.Vencimiento = ((Multa)nuevo).Vencimiento;
+                            }
+                            else
+                                multas.Add(nuevo);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+                finally
+                {
+                    if (sr != null)
+                        sr.Close();
+                    if (fs != null)
+                        fs.Close();
+                }
+            }
+            btnActualizar.PerformClick();
         }
     }
 }

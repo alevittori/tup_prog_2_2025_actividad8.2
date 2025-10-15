@@ -42,6 +42,8 @@
             this.btnExportar = new System.Windows.Forms.Button();
             this.btnImportar = new System.Windows.Forms.Button();
             this.btnActualizar = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -184,6 +186,7 @@
             this.btnImportar.TabIndex = 11;
             this.btnImportar.Text = "Importar";
             this.btnImportar.UseVisualStyleBackColor = true;
+            this.btnImportar.Click += new System.EventHandler(this.btnImportar_Click);
             // 
             // btnActualizar
             // 
@@ -195,6 +198,10 @@
             this.btnActualizar.Text = "Actualizar";
             this.btnActualizar.UseVisualStyleBackColor = true;
             this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -229,6 +236,8 @@
         private System.Windows.Forms.Button btnImportar;
         private System.Windows.Forms.Button btnActualizar;
         private System.Windows.Forms.ListBox lsbVer;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
