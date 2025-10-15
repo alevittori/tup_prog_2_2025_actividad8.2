@@ -43,18 +43,27 @@ namespace Ejercicio1
                 
                 nuevo = new Multa(patente, vencimiento.Date, importe);
 
-                //ver si es actualziar o es para agregar uno nuevo
-                multas.Sort();
-                int idx = multas.BinarySearch(nuevo);
-                if (idx >= 0)// Actualizo los datos
+                try
                 {
-                    Multa multa = multas[idx] as Multa;
-                    multa.Importe = importe;
-                    if (multa.Vencimiento < ((Multa)nuevo).Vencimiento) { multa.Vencimiento = ((Multa)nuevo).Vencimiento; }
-                }
-                else // agrego uno nuevo
+                    //ver si es actualziar o es para agregar uno nuevo
+                    multas.Sort();
+
+                    int idx = multas.BinarySearch(nuevo);
+                    if (idx >= 0)// Actualizo los datos
+                    {
+                        Multa multa = multas[idx] as Multa;
+                        multa.Importe = importe;
+                        if (multa.Vencimiento < ((Multa)nuevo).Vencimiento) { multa.Vencimiento = ((Multa)nuevo).Vencimiento; }
+                    }
+                    else // agrego uno nuevo
+                    {
+                        multas.Add(nuevo);
+                    }
+
+                }catch(Exception ex)
                 {
-                    multas.Add(nuevo);
+                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Error dentro de comparar ");
                 }
 
                 btnActualizar.PerformClick();
@@ -78,6 +87,26 @@ namespace Ejercicio1
             foreach(IExportable multa in multas)
             {
                 lsbVer.Items.Add(multa);
+            }
+        }
+
+        private void lsbVer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Multa multaSelect = lsbVer.SelectedItem as Multa;
+            try
+            {
+                if (multaSelect != null)
+                {
+                    dtpVencimiento.Value = multaSelect.Vencimiento;
+                    tbImporte.Text = multaSelect.Importe.ToString();
+                    tbPatente.Text = multaSelect.Patente;
+
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ups!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error en Listbox Select Cahnge");
             }
         }
     }

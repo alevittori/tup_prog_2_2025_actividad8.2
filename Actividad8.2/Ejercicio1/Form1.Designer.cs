@@ -163,6 +163,7 @@
             this.lsbVer.Name = "lsbVer";
             this.lsbVer.Size = new System.Drawing.Size(378, 147);
             this.lsbVer.TabIndex = 13;
+            this.lsbVer.SelectedIndexChanged += new System.EventHandler(this.lsbVer_SelectedIndexChanged);
             // 
             // btnExportar
             // 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ejercicio1.Models
 {
-    internal class Multa:IComparable<Multa>,IExportable
+    internal class Multa:IComparable,IExportable
     {
         string patente;
         DateTime  vencimiento;
@@ -29,15 +29,16 @@ namespace Ejercicio1.Models
         public Multa() { }
         public Multa(string patente,  DateTime vencimiento, double importe)
         {
-            Patente = patente;
+            Patente = patente.ToUpper();
             Vencimiento = vencimiento;
             Importe = importe;
         }
 
 
 
-        public int CompareTo(Multa other)
+        public int CompareTo(Object otherObj)
         {
+            Multa other = otherObj as Multa;
             if (other != null)
             {
                 return this.patente.CompareTo(other.patente);
@@ -57,7 +58,7 @@ namespace Ejercicio1.Models
 
         public override string ToString()
         {
-            return $"{patente} - importe {importe} - Vencimiento {vencimiento.Date:d}";
+            return $"{patente} - Importe {importe} - Vencimiento {vencimiento.Date:d}";
         }
 
         bool ValidaPatente(string patente)
