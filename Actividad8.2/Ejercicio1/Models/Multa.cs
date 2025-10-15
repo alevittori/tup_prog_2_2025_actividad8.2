@@ -47,17 +47,17 @@ namespace Ejercicio1.Models
 
         public string Exportar(IExportador exportador)
         {
-            throw new NotImplementedException();
+            return exportador.Exportar(this);
         }
 
         public bool Importar(string data, IExportador exportador)
         {
-            throw new NotImplementedException();
+            return exportador.Importar(data, this);
         }
 
         public override string ToString()
         {
-            return $"{patente} - importe {importe} - Vencimiento {vencimiento}";
+            return $"{patente} - importe {importe} - Vencimiento {vencimiento.Date:d}";
         }
 
         bool ValidaPatente(string patente)

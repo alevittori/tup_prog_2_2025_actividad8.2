@@ -13,11 +13,13 @@ namespace Ejercicio1
 {
     public partial class Form1 : Form
     {
-        List<Multa> multas;
+        //List<Multa> multas;
+        List<IExportable>multas  = new List<IExportable>();
+
         public Form1()
         {
             InitializeComponent();
-            multas = new List<Multa>();
+            //multas = new List<Multa>();
         }
 
         private void btnConfirmar_Click(object sender, EventArgs e)
@@ -32,18 +34,35 @@ namespace Ejercicio1
                 patente = tbPatente.Text;
                 //vencimiento = Convert.ToDateTime( dtpVencimiento.Text);
                 //vencimiento = dtpVencimiento.Value;
-                vencimiento = new DateTime(dtpVencimiento.Value.Day,dtpVencimiento.Value.Month,dtpVencimiento.Value.Year);
+                vencimiento = new DateTime(dtpVencimiento.Value.Year,dtpVencimiento.Value.Month,dtpVencimiento.Value.Day);
 
                 importe = Convert.ToDouble(tbImporte.Text);
 
                 //Multa unaMulta = new Multa(patente, vencimiento, importe);
                 //if (unaMulta != null ) { multas.Add(unaMulta); }
                 
-                nuevo = new Multa(patente, vencimiento, importe);
+                nuevo = new Multa(patente, vencimiento.Date, importe);
 
                 //ver si es actualziar o es para agregar uno nuevo
                 multas.Sort();
                 int idx = multas.BinarySearch(nuevo);
+                if (idx >= 0)// Actualizo los datos
+                {
+                    Multa multa = multas[idx] as Multa;
+                    multa.Importe = importe;
+                    if (multa.Vencimiento < ((Multa)nuevo).Vencimiento) { multa.Vencimiento = ((Multa)nuevo).Vencimiento; }
+                }
+                else // agrego uno nuevo
+                {
+                    multas.Add(nuevo);
+                }
+
+                btnActualizar.PerformClick();
+
+                tbPatente.Clear();
+                tbImporte.Clear();
+                dtpVencimiento.Value = DateTime.Now;
+
 
 
 
@@ -51,6 +70,15 @@ namespace Ejercicio1
             catch (ValidaPatenteException pex) { MessageBox.Show(pex.Message, "Formato", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             catch(Exception ex) { MessageBox.Show(ex.Message, "UPs!", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         
+        }
+
+        private void btnActualizar_Click(object sender, EventArgs e)
+        {
+            lsbVer.Items.Clear();
+            foreach(IExportable multa in multas)
+            {
+                lsbVer.Items.Add(multa);
+            }
         }
     }
 }

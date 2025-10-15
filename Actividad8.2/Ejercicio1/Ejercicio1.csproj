@@ -52,6 +52,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Exportadores\CampoFijoExportador.cs" />
+    <Compile Include="Models\Exportadores\CSVExportador.cs" />
     <Compile Include="Models\Exportadores\IExportador.cs" />
     <Compile Include="Models\IExportable.cs" />
     <Compile Include="Models\Multa.cs" />
